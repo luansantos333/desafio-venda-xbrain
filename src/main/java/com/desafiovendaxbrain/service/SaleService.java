@@ -1,0 +1,74 @@
+package com.desafiovendaxbrain.service;
+
+import com.desafiovendaxbrain.dto.SaleDTO;
+import com.desafiovendaxbrain.dto.SellerDTO;
+import com.desafiovendaxbrain.model.Sale;
+import com.desafiovendaxbrain.repository.SaleRepository;
+import com.desafiovendaxbrain.repository.projection.SellerProjection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class SaleService {
+
+    private final static Logger logger = LoggerFactory.getLogger(SaleService.class);
+    private final SaleRepository saleRepository;
+
+    public SaleService(SaleRepository saleRepository) {
+        this.saleRepository = saleRepository;
+    }
+
+
+    public SaleDTO makeNewSell(SaleDTO dto) {
+
+        Sale sale = new Sale();
+        mapDTOToEntity(sale, dto);
+
+        Sale persistedSaleEntity = saleRepository.save(sale);
+
+        return new SaleDTO(persistedSaleEntity.getId(), persistedSaleEntity.getSaleDate(),
+                persistedSaleEntity.getSalePrice(), persistedSaleEntity.getSellerId(), persistedSaleEntity.getSellerName());
+
+    }
+
+    public List<SellerDTO> getSellersByPeriod(Instant start, Instant end) {
+
+        if (end == null) {
+            logger.info("Since you did not enter an end date, it will default to the standard value...");
+            end = Instant.now();
+            logger.info("Defaulted end date to {}", end);
+        }
+
+        Long days = Duration.between(start, end).toDays() + 1;
+
+        if (days <=0) {
+
+            throw new ArithmeticException("Days must be greater than zero");
+        }
+
+        List<SellerProjection> sales = saleRepository.searchBySellPeriod(start, end, days);
+
+        return sales.stream().
+                map(x -> new SellerDTO(x.getSellerName(), x.getTotalSales(), x.getAverageSalesByDay()))
+                .collect(Collectors.toList());
+    }
+
+
+    private void mapDTOToEntity(Sale entity, SaleDTO dto) {
+
+        entity.setSalePrice(dto.salePrice());
+        entity.setSellerId(dto.sellerId());
+        entity.setSellerName(dto.sellerName());
+        entity.setSaleDate(dto.saleDate());
+
+
+    }
+
+
+}
