@@ -3,6 +3,7 @@ package com.desafiovendaxbrain.controller;
 import com.desafiovendaxbrain.dto.SaleDTO;
 import com.desafiovendaxbrain.dto.SellerDTO;
 import com.desafiovendaxbrain.service.SaleService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class SaleController {
     }
 
     @PostMapping
-    public ResponseEntity<SaleDTO> createSell(@RequestBody SaleDTO dto) {
+    public ResponseEntity<SaleDTO> createSell(@RequestBody @Valid SaleDTO dto) {
 
         SaleDTO createdSale = saleService.createSale(dto);
         HttpStatus status = HttpStatus.CREATED;
