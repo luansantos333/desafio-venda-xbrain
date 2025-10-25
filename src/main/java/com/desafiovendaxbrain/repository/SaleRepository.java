@@ -13,9 +13,9 @@ import java.util.List;
 public interface SaleRepository extends JpaRepository<Sale, Long> {
 
     @Query ("""
-            SELECT seller.sellerName AS sellerName, COUNT(seller) AS totalSales, COUNT(seller.id)/:days  AS averageSalesByDay FROM Sale seller WHERE seller.saleDate BETWEEN :start AND :end GROUP BY seller.sellerName
+            SELECT s.sellerName AS sellerName, COUNT(s) AS totalSales, COUNT(s.id)/:days  AS averageSalesByDay FROM Sale s WHERE s.saleDate BETWEEN :start AND :end GROUP BY s.sellerName
             """)
-    List<SellerProjection> searchBySellPeriod (Instant start, Instant end, Long days);
+    List<SellerProjection> findSellerStatisticsByPeriod(Instant startDate, Instant endDate, Long days);
 
 
 

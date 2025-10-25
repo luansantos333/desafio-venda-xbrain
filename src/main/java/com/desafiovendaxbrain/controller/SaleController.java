@@ -21,19 +21,19 @@ public class SaleController {
     }
 
     @PostMapping
-    public ResponseEntity<SaleDTO> sell(@RequestBody SaleDTO dto) {
+    public ResponseEntity<SaleDTO> createSell(@RequestBody SaleDTO dto) {
 
-        SaleDTO saleDTO = saleService.makeNewSell(dto);
+        SaleDTO createdSale = saleService.createSale(dto);
         HttpStatus status = HttpStatus.CREATED;
 
-        return ResponseEntity.status(status).body(saleDTO);
+        return ResponseEntity.status(status).body(createdSale);
     }
 
     @GetMapping
-    public ResponseEntity<List<SellerDTO>> searchSellingDataByTimePeriod(@RequestParam (required = true)Instant start, @RequestParam (required = false) Instant end) {
+    public ResponseEntity<List<SellerDTO>> searchSalesStatisticsByTimePeriod(@RequestParam (required = true)Instant start, @RequestParam (required = false) Instant end) {
 
 
-        List<SellerDTO> sellersByPeriod = saleService.getSellersByPeriod(start, end);
+        List<SellerDTO> sellersByPeriod = saleService.getSellerStatisticsByPeriod(start, end);
         HttpStatus status = HttpStatus.OK;
 
         return ResponseEntity.status(status).body(sellersByPeriod);

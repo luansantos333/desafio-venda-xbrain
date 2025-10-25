@@ -18,15 +18,15 @@ public class Sale {
     private Long id;
     private Instant saleDate;
     @Column(precision = 10, scale = 2)
-    private BigDecimal salePrice;
+    private BigDecimal amount;
     private Long sellerId;
     @Column(length = 100)
     private String sellerName;
 
-    public Sale(Long id, Instant saleDate, BigDecimal salePrice, Long sellerId, String sellerName) {
+    public Sale(Long id, Instant saleDate, BigDecimal amount, Long sellerId, String sellerName) {
         this.id = id;
         this.saleDate = saleDate;
-        this.salePrice = salePrice;
+        this.amount = amount;
         this.sellerId = sellerId;
         this.sellerName = sellerName;
     }

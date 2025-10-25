@@ -25,7 +25,7 @@ public class SaleService {
     }
 
 
-    public SaleDTO makeNewSell(SaleDTO dto) {
+    public SaleDTO createSale(SaleDTO dto) {
 
         Sale sale = new Sale();
         mapDTOToEntity(sale, dto);
@@ -33,26 +33,26 @@ public class SaleService {
         Sale persistedSaleEntity = saleRepository.save(sale);
 
         return new SaleDTO(persistedSaleEntity.getId(), persistedSaleEntity.getSaleDate(),
-                persistedSaleEntity.getSalePrice(), persistedSaleEntity.getSellerId(), persistedSaleEntity.getSellerName());
+                persistedSaleEntity.getAmount(), persistedSaleEntity.getSellerId(), persistedSaleEntity.getSellerName());
 
     }
 
-    public List<SellerDTO> getSellersByPeriod(Instant start, Instant end) {
+    public List<SellerDTO> getSellerStatisticsByPeriod(Instant startDate, Instant endDate) {
 
-        if (end == null) {
+        if (endDate == null) {
             logger.info("Since you did not enter an end date, it will default to the standard value...");
-            end = Instant.now();
-            logger.info("Defaulted end date to {}", end);
+            endDate = Instant.now();
+            logger.info("Defaulted end date to {}", endDate);
         }
 
-        Long days = Duration.between(start, end).toDays() + 1;
+        Long days = Duration.between(startDate, endDate).toDays() + 1;
 
         if (days <=0) {
 
             throw new ArithmeticException("Days must be greater than zero");
         }
 
-        List<SellerProjection> sales = saleRepository.searchBySellPeriod(start, end, days);
+        List<SellerProjection> sales = saleRepository.findSellerStatisticsByPeriod(startDate, endDate, days);
 
         return sales.stream().
                 map(x -> new SellerDTO(x.getSellerName(), x.getTotalSales(), x.getAverageSalesByDay()))
@@ -62,7 +62,7 @@ public class SaleService {
 
     private void mapDTOToEntity(Sale entity, SaleDTO dto) {
 
-        entity.setSalePrice(dto.salePrice());
+        entity.setAmount(dto.salePrice());
         entity.setSellerId(dto.sellerId());
         entity.setSellerName(dto.sellerName());
         entity.setSaleDate(dto.saleDate());
