@@ -67,7 +67,7 @@ public class SaleService {
 
     private void mapDTOToEntity(Sale entity, SaleDTO dto) {
 
-        entity.setAmount(dto.salePrice());
+        entity.setAmount(dto.amount());
         entity.setSellerId(dto.sellerId());
         entity.setSellerName(dto.sellerName());
         entity.setSaleDate(dto.saleDate());

@@ -50,7 +50,7 @@ public class SaleServiceTest {
         Assertions.assertThat(savedSale).isNotNull();
         Assertions.assertThat(savedSale.id()).isEqualTo(1L);
         Assertions.assertThat(savedSale.sellerName()).isEqualTo("Pedrinho");
-        Assertions.assertThat(savedSale.salePrice()).isEqualTo(BigDecimal.valueOf(100.0));
+        Assertions.assertThat(savedSale.amount()).isEqualTo(BigDecimal.valueOf(100.0));
 
         Mockito.verify(saleRepository, Mockito.times(1)).save(any(Sale.class));
 
