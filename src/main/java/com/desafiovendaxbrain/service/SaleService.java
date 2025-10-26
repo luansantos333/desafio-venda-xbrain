@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,7 +53,11 @@ public class SaleService {
             throw new ArithmeticException("Days must be greater than zero");
         }
 
-        List<SellerProjection> sales = saleRepository.findSellerStatisticsByPeriod(startDate, endDate, days);
+        List<SellerProjection> sales = saleRepository.findSellerStatisticsByPeriod(startDate, endDate, days).orElseThrow(() -> {
+
+        return new NoSuchElementException ("No selling found on the given period!");
+
+        });
 
         return sales.stream().
                 map(x -> new SellerDTO(x.getSellerName(), x.getTotalSales(), x.getAverageSalesByDay()))
