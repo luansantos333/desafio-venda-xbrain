@@ -532,16 +532,6 @@ Quando acessar `http://localhost:8080/h2-console`, use as seguintes configuraç�
 - Detecta problemas em diferentes níveis
 - Aumenta confiança nas refatorações
 
-### 10. Mensagens de Erro Descritivas
-
-**Decisão:** Customizar mensagens de validação em português.
-
-**Justificativa:**
-- Melhor experiência para desenvolvedores brasileiros
-- Facilita debugging
-- Mensagens claras sobre o que está errado
-- Alinhamento com requisitos de negócio locais
-
 ## Estrutura de Commits
 
 O projeto mantém histórico de commits organizado e descritivo, seguindo convenções:
