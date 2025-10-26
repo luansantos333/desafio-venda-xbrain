@@ -357,10 +357,59 @@ cd desafio-venda-xbrain
 
 4. **Acesse a aplicação:**
 - API: `http://localhost:8080/api/sales`
-- Console H2: `http://localhost:8080/h2-console`
+- Console H2: `http://localhost:8080/h2-console` (veja seção Docker para detalhes)
   - JDBC URL: `jdbc:h2:mem:testdb`
   - Username: `sa`
   - Password: (deixe em branco)
+
+### Executando com Docker
+
+O projeto inclui um Dockerfile para facilitar o deploy em containers.
+
+**1. Build do JAR:**
+```bash
+./mvnw clean package -DskipTests
+```
+
+**2. Copie o JAR para o diretório raiz:**
+```bash
+cp target/desafio-venda-xbrain-0.0.1-SNAPSHOT.jar .
+```
+
+**3. Build da imagem Docker:**
+```bash
+docker build -t desafio-venda-xbrain .
+```
+
+**4. Execute o container:**
+```bash
+docker run -p 8080:8080 desafio-venda-xbrain
+```
+
+**5. Acesse a aplicação:**
+- API: `http://localhost:8080/api/sales`
+- Console H2: `http://localhost:8080/h2-console`
+
+### Configuração do H2 Console
+
+O projeto inclui uma configuração especial (`H2ConsoleConfig`) que permite acesso remoto ao console H2, essencial para ambientes Docker.
+
+**Acessando o H2 Console:**
+
+Quando acessar `http://localhost:8080/h2-console`, use as seguintes configurações de conexão:
+
+| Campo | Valor |
+|-------|-------|
+| **Saved Settings** | Generic H2 (Embedded) |
+| **Driver Class** | `org.h2.Driver` |
+| **JDBC URL** | `jdbc:h2:mem:testdb` |
+| **User Name** | `sa` |
+| **Password** | (deixe em branco) |
+
+**Importante:**
+- O banco de dados H2 é **in-memory**, existindo apenas enquanto a aplicação estiver rodando
+- A JDBC URL **deve ser exatamente** `jdbc:h2:mem:testdb` (não use caminhos de arquivo como `~/test`)
+- Certifique-se de que a aplicação Spring Boot está rodando antes de conectar
 
 ### Executando os Testes
 
